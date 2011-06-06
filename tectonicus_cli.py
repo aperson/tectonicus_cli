@@ -5,9 +5,11 @@
 # Also, we'll keep the default options of the older, sub-2.00 tectonicus.
 
 import argparse
+import xml.etree.ElementTree as etree
 
 parser = argparse.ArgumentParser(
-    description='''Command-line interface to the Tectoniucs map renderer.'''
+    description='''Command-line interface to the Tectoniucs map renderer.''',
+    argument_default=''
     )
 
 parser.add_argument(
@@ -33,6 +35,7 @@ parser.add_argument(
 parser.add_argument(
     '--cameraAngle',
     type=int,
+    default=45,
     help='''This changes the orientation of north. The default setting of 45 produces an oblique view with north at the upper left of the map. 0 will give you north at the top; 90 will give you east at the top; and so on. As you increase this number imagine the map's cardinal directions rotating in a counter-clockwise direction.'''
     )
 
@@ -104,6 +107,7 @@ parser.add_argument(
 parser.add_argument(
     '--maxTiles',
     type=int,
+    default=-1,
     help='''This specialized argument is used only for troubleshooting. For example --maxTiles=100 will create a kind of "preview" map render consisting of only 100 base tiles (i.e. not the entire map).'''
     )
 
@@ -180,7 +184,7 @@ parser.add_argument(
     )
 
 parser.add_argument(
-    '--portalsIntiallyVisible',
+    '--portalsInitiallyVisible',
     type=bool,
     default=True,
     help='''Determines if the portals will be visible on initial loading of the map.'''
@@ -210,10 +214,16 @@ parser.add_argument(
     )
 
 parser.add_argument(
-    '--signsIntiallyVisible',
+    '--signsInitiallyVisible',
     type=bool,
     default=True,
     help='''Determines if the signs will be visible on initial loading of the map.'''
+    )
+
+parser.add_argument(
+    '--singlePlayerName',
+    type=str,
+    help='''Name to use when rendering single player world.'''
     )
 
 parser.add_argument(
@@ -264,4 +274,34 @@ parser.add_argument(
     )
 
 args = vars(parser.parse_args())
-print(args['useBiomeColors'])
+
+tectonicus = etree.Element('tectonicus', version='2')
+
+etree.SubElement(tectonicus, 'config',
+    mode=args['mode'],
+    outputDir=args['outputDir'],
+    outputHtmlName=args['outputHtmlName'],
+    minecraftJar=args['minecraftJar'],
+    texturePack=args['texturePack'],
+    numZoomLevels=str(args['numZoomLevels']),
+    singlePlayerName=args['singlePlayerName'],
+    spawnInitiallyVisible=str(args['spawnInitiallyVisible']).lower(),
+    playersInitiallyVisible=str(args['playersInitiallyVisible']).lower(),
+    bedsInitiallyVisible=str(args['bedsInitiallyVisible']).lower(),
+    signsInitiallyVisible=str(args['signsInitiallyVisible']).lower(),
+    portalsInitiallyVisible=str(args['portalsInitiallyVisible']).lower(),
+    numDownsampleThreads=str(args['numDownsampleThreads']),
+    eraseOutputDir=str(args['eraseOutputDir']).lower(),
+    useCache=str(args['useCache']).lower(),
+    logFile=args['logFile']
+    )
+
+etree.SubElement(tectonicus, 'rasterizer',
+    type='lwjgl',
+    colorDepth=str(args['colorDepth']),
+    alphaBits=str(args['alphaBits']),
+    numSamples=str(args['numSamples']),
+    tileSize=str(args['tileSize'])
+    )
+
+print(etree.tostring(tectonicus))
