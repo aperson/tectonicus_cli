@@ -1,1 +1,20 @@
-This project aims to restore Tectonicus's old command line options in light the their removal for an XML configuration file
+This project aims to restore Tectonicus' old command line options in light of
+their removal in favor of an xml configuration file.  While an xml
+configuration is fine in itself, it lacks certain flexibilities that command
+line options provide.
+
+When this script is completed, it will:
+
+* Restore Tectonicus' old command line options.
+* Support the new features of Tectonicus as they come out.
+* Possibly provide a prettier command line output while rendering - no more
+    wall of scrolling text.
+* Error checking of values before they reach tectonicus and possibly detection
+    of failed previous renders (this is more of a whishlist item).
+
+Currently this script retains most of the old options, although now they are no
+longer key=value pairs, but --option=value pairs.  Migration to this new format
+should be fairly painless as all the option names are retained.
+
+This script is still very much a work in progress and currently only outputs an xml
+file that Tectonicus can use.
