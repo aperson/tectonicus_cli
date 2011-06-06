@@ -54,7 +54,7 @@ parser.add_argument(
     )
 
 parser.add_argument(
-    '--colorDepth',
+    '--colourDepth',
     type=int,
     default=16,
     help='''Color Depth, like alpha bits, specifies how many bits are assigned to the colors in the tiles of the map. It is also passed directly to you graphics card, so you can pass any supported value. However, 24 ("millions of colors" or "truecolor"), or 16 ("thousands of colors"), is recommended.'''
@@ -339,7 +339,7 @@ config = etree.SubElement(tectonicus, 'config',
 
 rasterizer = etree.SubElement(tectonicus, 'rasterizer',
     type='lwjgl',
-    colorDepth=str(args['colorDepth']),
+    colorDepth=str(args['colourDepth']),
     alphaBits=str(args['alphaBits']),
     numSamples=str(args['numSamples']),
     tileSize=str(args['tileSize'])
@@ -377,7 +377,7 @@ spawn = etree.SubElement(map, 'spawn',
 
 layer = etree.SubElement(map, 'layer',
     name=args['renderStyle'],
-    lighting=args['renderStyle']
+    lighting=args['lighting']
     )
 
 tweeks = etree.SubElement(tectonicus, 'tweeks',
@@ -391,4 +391,4 @@ debug = etree.SubElement(tectonicus, 'debug',
     maxTiles=str(args['maxTiles'])
     )
 
-print(etree.tostring(tectonicus))
+etree.ElementTree(tectonicus).write('tectonicus.xml', encoding='utf-8')
