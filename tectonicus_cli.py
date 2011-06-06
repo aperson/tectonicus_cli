@@ -4,7 +4,7 @@
 # We generate the xml on runtime and *maybe* cache it for later use.
 # Also, we'll keep the default options of the older, sub-2.00 tectonicus.
 
-import arparse
+import argparse
 
 parser = argparse.ArgumentParser(
     description='''Command-line interface to the Tectoniucs map renderer.'''
@@ -33,7 +33,6 @@ parser.add_argument(
 parser.add_argument(
     '--cameraAngle',
     type=int,
-    default=list(range(361)),
     help='''This changes the orientation of north. The default setting of 45 produces an oblique view with north at the upper left of the map. 0 will give you north at the top; 90 will give you east at the top; and so on. As you increase this number imagine the map's cardinal directions rotating in a counter-clockwise direction.'''
     )
 
@@ -160,7 +159,8 @@ parser.add_argument(
 parser.add_argument(
     '--players',
     type=str,
-    defaults=['none', 'ops', 'blacklist', 'whitelist', 'all'],
+    default='all',
+    choices=['none', 'ops', 'blacklist', 'whitelist', 'all'],
     help='''Sets Tectonicus to render none, all, ops, or omit or include from a blacklist or a whitelist.'''
     )
 
@@ -190,7 +190,7 @@ parser.add_argument(
     '--renderStyle',
     type=str,
     default='regular',
-    choices=['cave', 'nether', 'regular']
+    choices=['cave', 'nether', 'regular'],
     help='''Specifies the map type to render. Caves only, the nether (requires setting: --dimension=nether) or the regular world map.'''
     )
 
@@ -233,7 +233,6 @@ parser.add_argument(
     '--tileSize',
     type=int,
     default=512,
-    choices=list(range(64, 1025)),
     help='''Specifies the size of the output image tiles, in pixels. Minimum: 64 Maximum: 1024'''
     )
 
@@ -263,3 +262,6 @@ parser.add_argument(
     type=str,
     help='''Path to your minecraft world directory.'''
     )
+
+args = vars(parser.parse_args())
+print(args['useBiomeColors'])
