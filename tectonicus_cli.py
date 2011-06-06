@@ -120,6 +120,12 @@ parser.add_argument(
     )
 
 parser.add_argument(
+    '--name',
+    type=str,
+    default='world',
+    help='''Name of the world.'''
+
+parser.add_argument(
     '--numDownsampleThreads',
     type=int,
     default=1,
@@ -277,7 +283,7 @@ args = vars(parser.parse_args())
 
 tectonicus = etree.Element('tectonicus', version='2')
 
-etree.SubElement(tectonicus, 'config',
+config = etree.SubElement(tectonicus, 'config',
     mode=args['mode'],
     outputDir=args['outputDir'],
     outputHtmlName=args['outputHtmlName'],
@@ -296,12 +302,43 @@ etree.SubElement(tectonicus, 'config',
     logFile=args['logFile']
     )
 
-etree.SubElement(tectonicus, 'rasterizer',
+rasterizer = etree.SubElement(tectonicus, 'rasterizer',
     type='lwjgl',
     colorDepth=str(args['colorDepth']),
     alphaBits=str(args['alphaBits']),
     numSamples=str(args['numSamples']),
     tileSize=str(args['tileSize'])
     )
+
+map = etree.SubElement(tectonicus, 'map',
+    name=args['name'],
+    cameraAngle=str(args['cameraAngle']),
+    cameraElevation=str(args['cameraElevation']),
+    closestZoomSize=str(args['closestZoomSize']),
+    worldDir=args['worldDir'],
+    dimension=args['dimension'],
+    useBiomeColours=str(args['useBiomeColurs']).lower(),
+    )
+
+signs = etree.SubElement(map, 'signs',
+    filter=args['signs']
+    )
+
+players = etree.SubElement(map, 'players',
+    filter=args['players'],
+    playerFilterFile=args['playerFilterFile'],
+    initiallyVisible=str(args['playerInitiallyVisible']).lower()
+    )
+
+portals = etree.SubElement(map, 'portals',
+    filter=args('portals'),
+    initiallyVisible=str(args['portalsInitiallyVisible']).lower()
+    )
+
+spawn = etree.SubElement(map, 'spawn',
+    show=str(args['showSpawn']).lower(),
+    initiallyVisible=str(args['spawnInitiallyVisible']).lower()
+    )
+
 
 print(etree.tostring(tectonicus))
