@@ -40,6 +40,13 @@ parser.add_argument(
     )
 
 parser.add_argument(
+    '--cameraElevation',
+    type=int,
+    default=45,
+    help='''This specifies the angle of elevation for the camera, in degrees. 0 is looking horizontally, 90 is looking directly down. Defaults to 45. Choose 30 for a more traditional isometric view.'''
+    )
+
+parser.add_argument(
     '--closestZoomSize',
     type=int,
     default=12,
@@ -66,6 +73,33 @@ parser.add_argument(
     type=bool,
     default=False,
     help='''Specify 'True' to erase the entire output directory and render from scratch.'''
+    )
+
+parser.add_argument(
+    '--extractLwjglNatives',
+    type=bool,
+    default=True,
+    )
+
+parser.add_argument(
+    '--force32BitNatives',
+    type=bool,
+    default=False,
+    help='''Force the use of 32bit libraries.'''
+    )
+
+parser.add_argument(
+    '--force64BitNatives',
+    type=bool,
+    default=False,
+    help='''Force the use of 64bit libraries.'''
+    )
+
+
+parser.add_argument(
+    '--forceLoadAwt',
+    type=bool,
+    default=False
     )
 
 parser.add_argument(
@@ -254,7 +288,7 @@ parser.add_argument(
     )
 
 parser.add_argument(
-    '--useBiomeColors',
+    '--useBiomeColours',
     type=bool,
     default=False,
     help='''Set to use biome colours for grass and leaves. Use True or False.'''
@@ -318,7 +352,7 @@ map = etree.SubElement(tectonicus, 'map',
     closestZoomSize=str(args['closestZoomSize']),
     worldDir=args['worldDir'],
     dimension=args['dimension'],
-    useBiomeColours=str(args['useBiomeColurs']).lower(),
+    useBiomeColours=str(args['useBiomeColours']).lower(),
     )
 
 signs = etree.SubElement(map, 'signs',
@@ -328,11 +362,11 @@ signs = etree.SubElement(map, 'signs',
 players = etree.SubElement(map, 'players',
     filter=args['players'],
     playerFilterFile=args['playerFilterFile'],
-    initiallyVisible=str(args['playerInitiallyVisible']).lower()
+    initiallyVisible=str(args['playersInitiallyVisible']).lower()
     )
 
 portals = etree.SubElement(map, 'portals',
-    filter=args('portals'),
+    filter=args['portals'],
     initiallyVisible=str(args['portalsInitiallyVisible']).lower()
     )
 
@@ -341,5 +375,20 @@ spawn = etree.SubElement(map, 'spawn',
     initiallyVisible=str(args['spawnInitiallyVisible']).lower()
     )
 
+layer = etree.SubElement(map, 'layer',
+    name=args['renderStyle'],
+    lighting=args['renderStyle']
+    )
+
+tweeks = etree.SubElement(tectonicus, 'tweeks',
+    extractLwjglNatives=str(args['extractLwjglNatives']).lower(),
+    forceLoadAwt=str(args['forceLoadAwt']).lower(),
+    force32BitNatives=str(args['force32BitNatives']).lower(),
+    force64BitNatives=str(args['force64BitNatives']).lower()
+    )
+
+debug = etree.SubElement(tectonicus, 'debug',
+    maxTiles=str(args['maxTiles'])
+    )
 
 print(etree.tostring(tectonicus))
