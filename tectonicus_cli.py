@@ -124,6 +124,7 @@ parser.add_argument(
     type=str,
     default='world',
     help='''Name of the world.'''
+    )
 
 parser.add_argument(
     '--numDownsampleThreads',
